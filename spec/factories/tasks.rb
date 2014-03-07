@@ -1,8 +1,11 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+require 'ffaker'
 
 FactoryGirl.define do
   factory :task do
-    text "MyString"
-    completion "2014-03-07 15:36:54"
+    todo_text Faker::Lorem.sentence(5)
+  end
+
+  factory :task_todo_text_long, class: Task do
+    todo_text Faker::Lorem.sentence(300)
   end
 end
