@@ -1,0 +1,7 @@
+<span id="todo-count">
+  <strong>{remaining}</strong> {@eq key=remaining value=1}item{:else}items{/eq} left
+</span>
+
+{?completed}
+<button id="clear-completed">Clear completed ({completed})</button>
+{/completed}
