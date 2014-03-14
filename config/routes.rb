@@ -1,4 +1,8 @@
 HAWTodo::Application.routes.draw do
+  get     'tasks'     => 'tasks#index'
+  post    'tasks'     => 'tasks#create'
+  delete  'tasks/:id' => 'tasks#delete'
+  put     'tasks/:id' => 'tasks#update'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
