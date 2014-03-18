@@ -4,46 +4,96 @@ describe TasksController do
 
   describe "GET index" do
     it "returns the tasks" do
-      task = FactoryGirl.create(:task)
-      get :index
-      assigns(:tasks).should eq([task])
+      FactoryGirl.create_list(:task, 10)
+
+      get :index, :format => :json
+
+      expect(response).to be_success
+      json = JSON.parse(response.body)
+      expect(json.length).to eq(10)
     end
   end
 
   describe "POST create" do
-    it "creates a new task" do
-      expect{
-        post :create, FactoryGirl.attributes_for(:task)
-      }.to change(Task, :count).by(1)
+    context "with valid attributes" do
+      it "creates a new task" do
+        expect{
+          post :create, task: FactoryGirl.attributes_for(:task), :format => :json
+        }.to change(Task, :count).by(1)
+      end
+
+      it "returns the new task" do
+        task = post :create, task: FactoryGirl.attributes_for(:task), :format => :json
+
+        expect(response).to be_success
+        json = JSON.parse(response.body)
+        expect(json.length).to eq(5) # each task has 5 attributes
+      end
     end
 
-    it "returns the new task"
+    context "with invalid attributes" do
+      before {
+        post :create, task: FactoryGirl.attributes_for(:task_todo_text_long), :format => :json
+      }
+
+      it "does not create a new task" do
+        expect{
+          post :create, task: FactoryGirl.attributes_for(:task_todo_text_long), :format => :json
+        }.to_not change(Task, :count)
+      end
+
+      it { should respond_with 422 }
+    end
   end
 
-  describe "DELETE delete" do
-    before :each do
+  describe "DELETE destroy" do
+    before {
       @task = FactoryGirl.create(:task)
-    end
+    }
 
-    it 'deletes the contact' do
+    it 'destroys the contact' do
       expect{
-        delete :delete, id: @task
+        delete :destroy, id: @task, :format => :json
       }.to change(Task, :count).by(-1)
     end
   end
 
   describe "PUT update" do
-    before :each do
-      @task = FactoryGirl.create(:task)
+    let(:task) { FactoryGirl.create(:task) }
+    let(:new_text) { task[:todo_text] + 'update' }
+    let(:task_todo_text_long) { FactoryGirl.create(:task_todo_text_long) }
+
+    context "with valid attributes" do
+      before {
+        put :update,
+          id: task,
+          task: FactoryGirl.attributes_for(:task, todo_text: new_text),
+          :format => :json
+        task.reload
+      }
+
+      it "changes task's atributes" do
+        expect(task.todo_text).to eq(new_text)
+      end
+
+      it { should respond_with 204 }
     end
 
-    it "changes @task's atributes" do
-      put :update, id: @task, todo_text: 'newtext'
-      @task.reload
-      @task.todo_text.should eq('newtext')
-    end
+    context "with invalid attributes" do
+      before {
+        put :update,
+          id: task,
+          task: FactoryGirl.attributes_for(:task_todo_text_long),
+          :format => :json
+        task.reload
+      }
 
-    it "returns the updated @task"
+      it "does not update task" do
+        expect(task.todo_text).to eq(task[:todo_text])
+      end
+
+      it { should respond_with 422 }
+    end
   end
 
 end

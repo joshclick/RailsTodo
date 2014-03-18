@@ -1,26 +1,30 @@
 class TasksController < ApplicationController
+  respond_to :json
   def index
     @tasks = Task.all
-    render json: @tasks
+    respond_with @tasks
   end
 
   def create
-    @task = Task.new(todo_text: params[:todo_text])
-    if @task.save
-      render json: @task
-    end
+    @task = Task.new(task_params)
+    @task.save
+    respond_with @task
   end
 
-  def delete
-    Task.delete(params[:id])
+  def destroy
+    Task.destroy(params[:id])
     @tasks = Task.all
-    render json: @tasks
+    respond_with @tasks
   end
 
   def update
     @task = Task.find(params[:id])
-    if @task.update_attributes(todo_text: params[:todo_text], completed: params[:completed])
-      render json: @task
-    end
+    @task.update_attributes(task_params)
+    respond_with @task
   end
+
+  private
+    def task_params
+      params.fetch(:task, {}).permit(:todo_text, :completed)
+    end
 end
