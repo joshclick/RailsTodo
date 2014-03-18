@@ -5,11 +5,7 @@ describe TasksController do
   describe "GET index" do
     it "returns the tasks" do
       FactoryGirl.create_list(:task, 10)
-
       get :index, :format => :json
-
-      expect(response).to be_success
-      json = JSON.parse(response.body)
       expect(json.length).to eq(10)
     end
   end
@@ -24,9 +20,6 @@ describe TasksController do
 
       it "returns the new task" do
         task = post :create, task: FactoryGirl.attributes_for(:task), :format => :json
-
-        expect(response).to be_success
-        json = JSON.parse(response.body)
         expect(json.length).to eq(5) # each task has 5 attributes
       end
     end
@@ -47,11 +40,8 @@ describe TasksController do
   end
 
   describe "DELETE destroy" do
-    before {
-      @task = FactoryGirl.create(:task)
-    }
-
     it 'destroys the contact' do
+      @task = FactoryGirl.create(:task)
       expect{
         delete :destroy, id: @task, :format => :json
       }.to change(Task, :count).by(-1)
@@ -60,10 +50,10 @@ describe TasksController do
 
   describe "PUT update" do
     let(:task) { FactoryGirl.create(:task) }
-    let(:new_text) { task[:todo_text] + 'update' }
-    let(:task_todo_text_long) { FactoryGirl.create(:task_todo_text_long) }
 
     context "with valid attributes" do
+      let(:new_text) { task[:todo_text] + 'update' }
+
       before {
         put :update,
           id: task,
@@ -80,6 +70,8 @@ describe TasksController do
     end
 
     context "with invalid attributes" do
+      let(:task_todo_text_long) { FactoryGirl.create(:task_todo_text_long) }
+
       before {
         put :update,
           id: task,
