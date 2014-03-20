@@ -2,24 +2,28 @@ class TasksController < ApplicationController
   respond_to :json
 
   def index
-    @tasks = Task.all
+    authorize! :index, Task
+    @tasks = current_user.tasks.all
     respond_with @tasks
   end
 
   def create
-    @task = Task.new(task_params)
+    authorize! :create, Task
+    @task = current_user.tasks.new(task_params)
     @task.save
     respond_with @task
   end
 
   def destroy
-    Task.destroy(params[:id])
-    @tasks = Task.all
+    authorize! :destroy, Task
+    current_user.tasks.destroy(params[:id])
+    @tasks = current_user.tasks.all
     respond_with @tasks
   end
 
   def update
-    @task = Task.find(params[:id])
+    authorize! :update, Task
+    @task = current_user.tasks.find(params[:id])
     @task.update_attributes(task_params)
     respond_with @task
   end

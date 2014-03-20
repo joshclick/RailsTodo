@@ -1,10 +1,15 @@
 require 'spec_helper'
 
 describe TasksController do
+  include Devise::TestHelpers
+  let(:user) { FactoryGirl.create(:user) }
+  before {
+    sign_in user
+  }
 
   describe "GET index" do
     it "returns the tasks" do
-      FactoryGirl.create_list(:task, 10)
+      @list = FactoryGirl.create_list(:task, 10, user: user)
       get :index, :format => :json
       expect(json.length).to eq(10)
     end
@@ -14,24 +19,24 @@ describe TasksController do
     context "with valid attributes" do
       it "creates a new task" do
         expect{
-          post :create, task: FactoryGirl.attributes_for(:task), :format => :json
+          post :create, task: FactoryGirl.attributes_for(:task, user: user), :format => :json
         }.to change(Task, :count).by(1)
       end
 
       it "returns the new task" do
-        task = post :create, task: FactoryGirl.attributes_for(:task), :format => :json
-        expect(json.length).to eq(5) # each task has 5 attributes
+        task = post :create, task: FactoryGirl.attributes_for(:task, user: user), :format => :json
+        expect(json.length).to eq(6) # each task has 6 attributes
       end
     end
 
     context "with invalid attributes" do
       before {
-        post :create, task: FactoryGirl.attributes_for(:task_todo_text_long), :format => :json
+        post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), :format => :json
       }
 
       it "does not create a new task" do
         expect{
-          post :create, task: FactoryGirl.attributes_for(:task_todo_text_long), :format => :json
+          post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), :format => :json
         }.to_not change(Task, :count)
       end
 
@@ -41,7 +46,7 @@ describe TasksController do
 
   describe "DELETE destroy" do
     it 'destroys the contact' do
-      @task = FactoryGirl.create(:task)
+      @task = FactoryGirl.create(:task, user: user)
       expect{
         delete :destroy, id: @task, :format => :json
       }.to change(Task, :count).by(-1)
@@ -49,7 +54,7 @@ describe TasksController do
   end
 
   describe "PUT update" do
-    let(:task) { FactoryGirl.create(:task) }
+    let(:task) { FactoryGirl.create(:task, user: user) }
 
     context "with valid attributes" do
       let(:new_text) { task[:todo_text] + 'update' }
@@ -57,7 +62,7 @@ describe TasksController do
       before {
         put :update,
           id: task,
-          task: FactoryGirl.attributes_for(:task, todo_text: new_text),
+          task: FactoryGirl.attributes_for(:task, todo_text: new_text, user: user),
           :format => :json
         task.reload
       }
@@ -70,12 +75,10 @@ describe TasksController do
     end
 
     context "with invalid attributes" do
-      let(:task_todo_text_long) { FactoryGirl.create(:task_todo_text_long) }
-
       before {
         put :update,
           id: task,
-          task: FactoryGirl.attributes_for(:task_todo_text_long),
+          task: FactoryGirl.attributes_for(:task, :long_text, user: user),
           :format => :json
         task.reload
       }
