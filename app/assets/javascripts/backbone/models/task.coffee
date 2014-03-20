@@ -1,5 +1,5 @@
 window.HAW.todo.models.Task = Backbone.Model.extend
-    url: '/tasks'
+    urlRoot: '/tasks'
 
     defaults:
       todo_text: ''

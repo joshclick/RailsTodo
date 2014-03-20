@@ -1,9 +1,6 @@
 class TasksController < ApplicationController
   respond_to :json
 
-  def view
-  end
-
   def index
     @tasks = Task.all
     respond_with @tasks
