@@ -10,10 +10,11 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
 
 gem 'jquery-rails'
+gem 'dust-rails'
 
 group :test, :development do
-  gem 'jasmine'
-  gem 'jasmine-headless-webkit'
+  gem 'jasmine', '>=2.0.0'
+  gem 'jasmine-jquery-rails'
   gem 'ffaker'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
