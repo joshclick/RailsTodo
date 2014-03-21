@@ -1,5 +1,3 @@
-require 'ffaker'
-
 FactoryGirl.define do
   factory :task do
     todo_text Faker::Lorem.sentence(5)

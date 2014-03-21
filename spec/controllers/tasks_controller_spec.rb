@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe TasksController do
   include Devise::TestHelpers
+
   let(:user) { FactoryGirl.create(:user) }
-  before {
-    sign_in user
-  }
+
+  before { sign_in user }
 
   describe "GET index" do
     it "returns the tasks" do
-      @list = FactoryGirl.create_list(:task, 10, user: user)
+      FactoryGirl.create_list(:task, 10, user: user)
       get :index, :format => :json
       expect(json.length).to eq(10)
     end
@@ -46,9 +46,9 @@ describe TasksController do
 
   describe "DELETE destroy" do
     it 'destroys the contact' do
-      @task = FactoryGirl.create(:task, user: user)
+      task = FactoryGirl.create(:task, user: user)
       expect{
-        delete :destroy, id: @task, :format => :json
+        delete :destroy, id: task, :format => :json
       }.to change(Task, :count).by(-1)
     end
   end

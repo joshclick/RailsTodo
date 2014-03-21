@@ -8,22 +8,22 @@ describe User do
     subject(:ability){ Ability.new(good_user) }
 
     context "for tasks" do
-      it "can index" do
+      it "can #index" do
         ability.should be_able_to(:index, Task.new(:user => good_user))
         ability.should_not be_able_to(:index, Task.new(:user => bad_user))
       end
 
-      it "can create" do
+      it "can #create" do
         ability.should be_able_to(:create, Task.new(:user => good_user))
         ability.should_not be_able_to(:create, Task.new(:user => bad_user))
       end
 
-      it "can destroy" do
+      it "can #destroy" do
         ability.should be_able_to(:destroy, Task.new(:user => good_user))
         ability.should_not be_able_to(:destroy, Task.new(:user => bad_user))
       end
 
-      it "can update" do
+      it "can #update" do
         ability.should be_able_to(:destroy, Task.new(:user => good_user))
         ability.should_not be_able_to(:destroy, Task.new(:user => bad_user))
       end
