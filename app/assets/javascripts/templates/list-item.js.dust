@@ -1,0 +1,7 @@
+<div class="view">
+    <input class="toggle" type="checkbox" {?completed}checked{/completed}>
+    <label>{todo_text}</label>
+    <button class="destroy"></button>
+  </div>
+  <input class="edit" value="{todo_text}">
+</script>

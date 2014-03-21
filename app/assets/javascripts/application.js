@@ -12,4 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require_tree ./vendor/init
 //= require_tree ./vendor/backbone
+//= require dust-core
+//= require_tree ./templates
+//= require backbone/backbone
