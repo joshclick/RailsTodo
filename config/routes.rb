@@ -1,5 +1,6 @@
 HAWTodo::Application.routes.draw do
   root    :to         => 'tasks#view'
+  devise_for :users
   resources :tasks
 
   # The priority is based upon order of creation:
