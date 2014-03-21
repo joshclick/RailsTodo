@@ -70,8 +70,6 @@ describe TasksController do
       it "changes task's atributes" do
         expect(task.todo_text).to eq(new_text)
       end
-
-      it { should respond_with 204 }
     end
 
     context "with invalid attributes" do
@@ -86,8 +84,6 @@ describe TasksController do
       it "does not update task" do
         expect(task.todo_text).to eq(task[:todo_text])
       end
-
-      it { should respond_with 422 }
     end
   end
 

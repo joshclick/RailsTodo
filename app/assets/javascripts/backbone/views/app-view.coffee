@@ -47,7 +47,7 @@ window.HAW.todo.views.AppView = Backbone.View.extend
         @tasks.each @addOne, @
 
     createOnEnter: (e) ->
-        if e.which is ENTER_KEY and @$input.val().trim()
+        if e.which is window.ENTER_KEY and @$input.val().trim()
             @tasks.create
                 todo_text: @$input.val().trim()
             @$input.val ''
@@ -57,5 +57,3 @@ window.HAW.todo.views.AppView = Backbone.View.extend
 
 app = new window.HAW.todo.views.AppView()
 Backbone.history.start()
-ENTER_KEY = 13
-ESC_KEY = 27;
