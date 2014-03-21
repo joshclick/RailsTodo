@@ -35,7 +35,7 @@ describe TasksController do
 
       it "returns the new task" do
         task = post :create, task: FactoryGirl.attributes_for(:task, user: user), :format => :json
-        expect(json.length).to eq(6) # each task has 6 attributes
+        expect(json.length).to eq(7) # each task has 7 attributes
       end
     end
 
@@ -77,8 +77,12 @@ describe TasksController do
         task.reload
       }
 
-      it "changes task's atributes" do
+      it "changes task's attributes" do
         expect(task.todo_text).to eq(new_text)
+      end
+
+      it "updated the task version" do
+        task.version.should == 2
       end
     end
 
