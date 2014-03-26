@@ -6,5 +6,9 @@ FactoryGirl.define do
     trait :secondary do
       email Faker::Internet.email
     end
+
+    trait :admin do
+      admin true
+    end
   end
 end
