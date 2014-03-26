@@ -5,3 +5,6 @@ window.HAW.todo =
     collections: {}
     views: {}
     routers: {}
+
+    ENTER_KEY: 13
+    ESC_KEY: 27

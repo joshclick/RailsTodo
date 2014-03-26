@@ -6,6 +6,6 @@ describe Task do
   end
 
   it "is invalid if todo_text.length > 512" do
-    FactoryGirl.build(:task_todo_text_long).should_not be_valid
+    FactoryGirl.build(:task, :long_text).should_not be_valid
   end
 end

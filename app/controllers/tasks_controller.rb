@@ -1,27 +1,24 @@
 class TasksController < ApplicationController
   respond_to :json
+  load_and_authorize_resource
 
   def index
-    @tasks = Task.all
     respond_with @tasks
   end
 
   def create
-    @task = Task.new(task_params)
     @task.save
     respond_with @task
   end
 
   def destroy
-    Task.destroy(params[:id])
-    @tasks = Task.all
-    respond_with @tasks
+    @task.destroy()
+    render nothing: true
   end
 
   def update
-    @task = Task.find(params[:id])
     @task.update_attributes(task_params)
-    respond_with @task
+    render nothing: true
   end
 
   private
