@@ -8,10 +8,20 @@ describe TasksController do
   before { sign_in user }
 
   describe "GET index" do
-    it "returns the tasks" do
-      FactoryGirl.create_list(:task, 10, user: user)
-      get :index, :format => :json
-      expect(json.length).to eq(10)
+    let(:num) { 12 }
+    let(:per_page) { 10 }
+    before { FactoryGirl.create_list(:task, num) }
+
+    context 'with pagination' do
+      it "paginates first page" do
+        get :index, page: 1, format: :json
+        expect(json.length).to eq(per_page)
+      end
+
+      it "paginates second page" do
+        get :index, page: 2, format: :json
+        expect(json.length).to eq(num - per_page)
+      end
     end
   end
 

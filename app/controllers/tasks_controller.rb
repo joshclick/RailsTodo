@@ -2,7 +2,12 @@ class TasksController < ApplicationController
   respond_to :json
   load_and_authorize_resource
 
+  def count
+    respond_with Task.all.count
+  end
+
   def index
+    @tasks = Task.order('created_at DESC').page(params[:page])
     respond_with @tasks
   end
 

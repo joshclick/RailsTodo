@@ -2,6 +2,10 @@
   <strong>{remaining}</strong> {@eq key=remaining value=1}item{:else}items{/eq} left
 </span>
 
+<i class="page-arrow fa fa-long-arrow-left fa-lg prev-page {?minPage}light{/minPage}"></i>
+...
+<i class="page-arrow fa fa-long-arrow-right fa-lg next-page {?maxPage}light{/maxPage}"></i>
+
 {?completed}
 <button id="clear-completed">Clear completed ({completed})</button>
 {/completed}
