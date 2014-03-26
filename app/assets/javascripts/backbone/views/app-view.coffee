@@ -21,19 +21,19 @@ window.HAW.todo.views.AppView = Backbone.View.extend
         @listenTo @tasks, 'all', @render
 
         self = @
-        @tasks.fetch
-            reset: true
-            success: (collection, resp) ->
-                console.log collection
-                self.totalLen = collection.length
-                self.nextPage()
+        $.ajax
+            url: '/tasks/count/'
+            dataType: 'text'
+            success: (data) ->
+                self.totalLen = data
 
+        @refreshTasks()
 
     render: ->
         completed = @tasks.completed().length
         remaining = @tasks.remaining().length.toString()
-        maxPageBool = (@tasks.page || 1) >= Math.ceil @totalLen / @perPage
-        minPageBool = (@tasks.page || 1) <= 1
+        maxPageBool = @tasks.page >= Math.ceil @totalLen / @perPage
+        minPageBool = @tasks.page <= 1
 
         if @tasks.length
             @$main.show()
@@ -57,7 +57,7 @@ window.HAW.todo.views.AppView = Backbone.View.extend
         @tasks.each @addOne, @
 
     createOnEnter: (e) ->
-        if e.which is window.ENTER_KEY and @$input.val().trim()
+        if e.which is window.HAW.todo.ENTER_KEY and @$input.val().trim()
             @tasks.create
                 todo_text: @$input.val().trim()
             @$input.val ''
@@ -72,16 +72,18 @@ window.HAW.todo.views.AppView = Backbone.View.extend
             @tasks.page = newPageNum
         else
             @tasks.page++
-            @tasks.fetch
-                reset: true
+            @refreshTasks()
 
     prevPage: ->
         if @tasks.page <= 1
             @tasks.page = 1
         else
             @tasks.page--
-            @tasks.fetch
-                reset: true
+            @refreshTasks()
+
+    refreshTasks: ->
+        @tasks.fetch
+            reset: true
 
 app = new window.HAW.todo.views.AppView()
 Backbone.history.start()

@@ -49,10 +49,10 @@ window.HAW.todo.views.TaskView = Backbone.View.extend
 
 
     updateOnEnter: (e) ->
-        @close() if e.which is window.ENTER_KEY
+        @close() if e.which is window.HAW.todo.ENTER_KEY
 
     revertOnEscape: (e) ->
-        @$el.removeClass 'editing' if e.which is window.ESC_KEY
+        @$el.removeClass 'editing' if e.which is window.HAW.todo.ESC_KEY
 
     clear: ->
         @model.destroy()

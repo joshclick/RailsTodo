@@ -2,15 +2,10 @@ window.HAW.todo.collections.Tasks = Backbone.Collection.extend
     model: window.HAW.todo.models.Task
 
     url: ->
-        if @page > 0
-            return '/tasks?' + $.param
-                page: @page
-        else
-            return '/tasks'
+        '/tasks?' + $.param
+            page: @page
 
-    initialize: -> @page = 0
-
-    total: (@total) ->
+    initialize: -> @page = 1
 
     setPage: (@page) ->
 
