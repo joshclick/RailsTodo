@@ -15,12 +15,12 @@ describe TasksController do
     context 'with pagination' do
       it "paginates first page" do
         get :index, page: 1, format: :json
-        expect(json.length).to eq(per_page)
+        expect(assigns(:tasks).length).to eq(per_page)
       end
 
       it "paginates second page" do
         get :index, page: 2, format: :json
-        expect(json.length).to eq(num - per_page)
+        expect(assigns(:tasks).length).to eq(num - per_page)
       end
     end
   end
@@ -29,24 +29,24 @@ describe TasksController do
     context "with valid attributes" do
       it "creates a new task" do
         expect{
-          post :create, task: FactoryGirl.attributes_for(:task, user: user), :format => :json
+          post :create, task: FactoryGirl.attributes_for(:task, user: user), format: :json
         }.to change(Task, :count).by(1)
       end
 
       it "returns the new task" do
-        task = post :create, task: FactoryGirl.attributes_for(:task, user: user), :format => :json
-        expect(json.length).to eq(7) # each task has 7 attributes
+        post :create, task: FactoryGirl.attributes_for(:task, user: user), format: :json
+        expect(assigns(:task)).to eq(Task.last)
       end
     end
 
     context "with invalid attributes" do
       before {
-        post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), :format => :json
+        post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), format: :json
       }
 
       it "does not create a new task" do
         expect{
-          post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), :format => :json
+          post :create, task: FactoryGirl.attributes_for(:task, :long_text, user: user), format: :json
         }.to_not change(Task, :count)
       end
 
@@ -58,7 +58,7 @@ describe TasksController do
     it 'destroys the contact' do
       task = FactoryGirl.create(:task, user: user)
       expect{
-        delete :destroy, id: task, :format => :json
+        delete :destroy, id: task, format: :json
       }.to change(Task, :count).by(-1)
     end
   end
@@ -73,7 +73,7 @@ describe TasksController do
         put :update,
           id: task,
           task: FactoryGirl.attributes_for(:task, todo_text: new_text, user: user),
-          :format => :json
+          format: :json
         task.reload
       }
 
@@ -91,7 +91,7 @@ describe TasksController do
         put :update,
           id: task,
           task: FactoryGirl.attributes_for(:task, :long_text, user: user),
-          :format => :json
+          format: :json
         task.reload
       }
 

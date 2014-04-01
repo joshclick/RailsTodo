@@ -1,0 +1,12 @@
+%table
+  %thead
+    %tr
+      %td email
+      %td sign in count
+      %td created
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.email
+        %td= user.sign_in_count
+        %td= user.created_at
